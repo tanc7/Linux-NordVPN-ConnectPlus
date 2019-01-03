@@ -1,10 +1,10 @@
-# Completely random openvpn autoconnect!
+# Features
 
-Randomly selects from list of available NordVPN profiles a IP address to connect to
+Automatic username and password entry
 
-Auto-enters your username and password.
+Completely random draw of VPNs to connect to
 
-Handy if you are a targeted individual that wants a completely quick and random method of picking a VPN server to choose from.
+Automated OpenVPN-over-Shadowsocks method to protect the VPN session from being blocked by government
 
 # New Update, Connect-OpenVPN-over-Shadowsocks support
 
@@ -34,8 +34,6 @@ Do not use the recommended builds of Amazon EC2 Cloud Instances, DigitalOcean Dr
 
 **In other words, if you were allowed to touch the private cloud. You got owned by a three letter agency.**
 
-If you are some God-fearing, Sieg-Heiling, White Nationalist and Alt-Right self-hating nutcase that loves the taste of mayonaise, and you do not use a alternative to what I just warned you about, you are a stupid ass that earned your spot in prison. Take what I am telling you with more than a grain of salt, and put more effort into covering your tracks. I am doing this because you're my customer, and this is what you paid me to tell you. Technically, I failed you if you got caught up.
-
 Here is a good example of a alternative to the oppressor's military-industrial IT complex, it is a similar service to Amazon AWS but it's provided by a offshore entity and they accept bitcoin (they are in fact, Bulgarian-owned): https://www.superbithost.com/offshore-bitcoin-vps/linux/russia
 
 Make sure you pre-plan the process. Figure out what distro of Linux you want to host and install in the alt-cloud. Figure out if it smoothly configures Shadowsocks, Wireguard, OpenVPN, SSL-Tunnel, and Tor obfs4 relays properly. And always procure vital services from a country that has "strained diplomatic ties" with Big Brother. The more unwilling or resistant to law enforcement cooperation/coercion the entity/country is, the longer it takes for the Feds to gain any reasonable or workable amount of intelligence about you.
@@ -54,7 +52,9 @@ Create two files containing your NordVPN username and password
 
 Now you can randomly pick out of 9,760 IP addresses to choose from to autoconnect each time!
 
-# Locally hosted Shadowsocks proxy server
+# Alternative Locally hosted Shadowsocks proxy server
+
+People are apparently unaware that you can simply host Shadowsocks on your own box and have it serve as a Shadowsocks server. You **get the benefits of the obfuscation method to tunnel past firewalls** but you **give up your anonymity of having a IP of the remote shadowsocks server** but this is at **no additional monthly rent or cost to you**.
 
 Edit your shadowsocks configuration, `nano /etc/shadowsocks/config.json` and enter the following...
 
