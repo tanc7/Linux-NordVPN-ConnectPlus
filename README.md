@@ -10,9 +10,19 @@ Handy if you are a targeted individual that wants a completely quick and random 
 
 **Random-OVPN-Autoconnect now supports connecting over Shadowsocks** to protect the identity of the VPN from being discovered by your fascist oppressors.
 
-This prevents the VPN from being identified and blocked, which is common in both China and the United States.
+This prevents the VPN from being identified and blocked, which is common in both China and the United States. It appears on Wireshark as both HTTP/HTTPS (requests made by Shadowsocks) and TCP traffic (OpenVPN). The normal looking traffic doesn't set off alarms like VPNs and Tor do.
 
-How to use.
+***Warning: When you wrap a OpenVPN session with Shadowsocks, only the traffic that passes through the Shadowsocks listener port will be proxified and therefore, sent to the VPN server to be anonymized***
+
+That means all other traffic that is NOT proxy-aware OR NOT transparently proxyfied using either tsocks or proxychains will OPEN to packet sniffers and deep packet inspection. Please check that you can proxify your traffic of your app if it has proxy settings (use SOCKS5) or if you can proxify the app with `proxychains command`. See this diagram...
+
+Unproxified App ----Transparent Proxifier----> Shadowsocks listener 1080 ----Forwards----> OpenVPN session
+
+Proxychains will also need to be configured by editing the configuration file `nano /etc/proxychains.conf` and removing `socks4 127.0.0.1 9050` and replacing it with `socks5 127.0.0.1 1080`. You also need to edit your proxyresolv script, `nano /usr/lib/proxychains3/proxyresolv` and change `4.2.2.2` to `1.1.1.1` or `8.8.8.8`.
+
+***Only traffic that is transparently proxified such as `proxychains firefox google.com` will be protected through this scheme***
+
+# Usage syntax
 
 `vpn-autoconnect.py 1` is the standard way of connecting directly to OpenVPN without the anonymizing web-traffic look of Shadowsocks
 
@@ -43,4 +53,47 @@ Create two files containing your NordVPN username and password
 `echo {password} > /root/nordvpnpass`
 
 Now you can randomly pick out of 9,760 IP addresses to choose from to autoconnect each time!
+
+# Locally hosted Shadowsocks proxy server
+
+Edit your shadowsocks configuration, `nano /etc/shadowsocks/config.json` and enter the following...
+
+    "server":"127.0.0.1",
+    "server_port":8388,
+    "local_address": "127.0.0.1",
+    "local_port":1080,
+    "password":"PASSWORD",
+    "timeout":300,
+    "method":"aes-256-cfb",
+    "fast_open": false,
+    "workers": 1,
+    "prefer_ipv6": false
+
+Edit your crontab, `crontab -e` and add this to the bottom
+
+`@reboot ss-server -c /etc/shadowsocks/config.json -d 1.1.1.1,8.8.8.8,8.8.4.4 start`
+
+Download the graphical Shadowsocks Client at https://github.com/shadowsocks/shadowsocks-qt5/releases
+
+Run the AppImage file
+
+`chmod a+x Shadowsocks-Qt5-3.0.1-x86_64.AppImage && ./Shadowsocks-Qt5-3.0.1-x86_64.AppImage`
+
+Then use the GUI and enter the information that was contained in your config.json above. Now my Python app automatically reconfigures your OVPN profile files for Shadowsocks use, but for the sake of learning, you simp
+ly add...
+
+`socks-proxy $LOCAL_SERVER_IP $LOCAL_LISTEN_PORT`
+
+and
+
+`route $LOCALHOST 255.255.255.255 net_gateway`
+
+to the bottom of the .ovpn file and then run it with `openvpn file.ovpn`
+
+In my situation I simply entered this at the bottom of my many ovpn files
+
+`socks-proxy 127.0.0.1 1080`
+`route 127.0.0.1 255.255.255.255 net_gateway`
+
+**All my app did is wait for you to connect to Shadowsocks before proceeding with the last step**
 
