@@ -97,3 +97,6 @@ In my situation I simply entered this at the bottom of my many ovpn files
 
 **All my app did is wait for you to connect to Shadowsocks before proceeding with the last step**
 
+Now remember, ALL CONFIGURED proxy-aware apps like your web browser, and MOST TRANSPARENTLY PROXIFIED non-proxy aware apps will be properly anonymized via `proxychains command`.
+
+I said MOST and NOT ALL transparently proxified apps because it depends on the differences in **how a app utilizes the networking stack**, generally DIRECT connection attempts will bypass the proxy and reveal you. For example, certain scans in nmap cannot be proxified, and will reveal your attacker IP address because it creates a direct connection (-sS scans). Same goes for most of Metasploit's msfconsole. Most of their attacks cannot be proxified unless EXPLICITLY said so.
